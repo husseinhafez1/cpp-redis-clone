@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = -I/mnt/c/Users/Legon/Desktop/cpp-redis-clone/include
 
-CXX_FLAGS = -DGTEST_HAS_PTHREAD=1 -std=gnu++17
+CXX_FLAGS = -Wall -Wextra -Wpedantic -Werror -DGTEST_HAS_PTHREAD=1 -std=gnu++17
 

@@ -1,37 +1,117 @@
-Start testing: Jun 07 21:41 CEST
+Start testing: Jun 07 23:38 CEST
 ----------------------------------------------------------
 1/1 Testing: store_tests
 1/1 Test: store_tests
 Command: "/mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/tests/store_tests"
 Directory: /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/tests
-"store_tests" start time: Jun 07 21:41 CEST
+"store_tests" start time: Jun 07 23:38 CEST
 Output:
 ----------------------------------------------------------
 Running main() from ./googletest/src/gtest_main.cc
-[==========] Running 5 tests from 1 test suite.
-[----------] Global test environment set-up.
-[----------] 5 tests from StoreTests
-[ RUN      ] StoreTests.AddKeyValue
-[       OK ] StoreTests.AddKeyValue (0 ms)
-[ RUN      ] StoreTests.GetKeyValue
-[       OK ] StoreTests.GetKeyValue (0 ms)
-[ RUN      ] StoreTests.UpdateKeyValue
-[       OK ] StoreTests.UpdateKeyValue (0 ms)
-[ RUN      ] StoreTests.RemoveKeyValue
-[       OK ] StoreTests.RemoveKeyValue (0 ms)
-[ RUN      ] StoreTests.GetAllKeys
-[       OK ] StoreTests.GetAllKeys (0 ms)
-[----------] 5 tests from StoreTests (0 ms total)
+[0;32m[==========] [mRunning 12 tests from 1 test suite.
+[0;32m[----------] [mGlobal test environment set-up.
+[0;32m[----------] [m12 tests from StoreTests
+[0;32m[ RUN      ] [mStoreTests.AddAndGet
+Starting test: AddAndGet
+Running AddAndGet test
+Finished test: AddAndGet
+[0;32m[       OK ] [mStoreTests.AddAndGet (0 ms)
+[0;32m[ RUN      ] [mStoreTests.Update
+Starting test: Update
+Running Update test
+Finished test: Update
+[0;32m[       OK ] [mStoreTests.Update (0 ms)
+[0;32m[ RUN      ] [mStoreTests.Remove
+Starting test: Remove
+Running Remove test
+Finished test: Remove
+[0;32m[       OK ] [mStoreTests.Remove (0 ms)
+[0;32m[ RUN      ] [mStoreTests.GetAll
+Starting test: GetAll
+Running GetAll test
+Finished test: GetAll
+[0;32m[       OK ] [mStoreTests.GetAll (0 ms)
+[0;32m[ RUN      ] [mStoreTests.Expiration
+Starting test: Expiration
+Running Expiration test
+Finished test: Expiration
+[0;32m[       OK ] [mStoreTests.Expiration (0 ms)
+[0;32m[ RUN      ] [mStoreTests.Persist
+Starting test: Persist
+Running Persist test
+Finished test: Persist
+[0;32m[       OK ] [mStoreTests.Persist (0 ms)
+[0;32m[ RUN      ] [mStoreTests.ExpireNonExistent
+Starting test: ExpireNonExistent
+Running ExpireNonExistent test
+Finished test: ExpireNonExistent
+[0;32m[       OK ] [mStoreTests.ExpireNonExistent (0 ms)
+[0;32m[ RUN      ] [mStoreTests.GetTTLNonExistent
+Starting test: GetTTLNonExistent
+Running GetTTLNonExistent test
+Finished test: GetTTLNonExistent
+[0;32m[       OK ] [mStoreTests.GetTTLNonExistent (0 ms)
+[0;32m[ RUN      ] [mStoreTests.PersistNonExistent
+Starting test: PersistNonExistent
+Running PersistNonExistent test
+Finished test: PersistNonExistent
+[0;32m[       OK ] [mStoreTests.PersistNonExistent (0 ms)
+[0;32m[ RUN      ] [mStoreTests.UpdateExpired
+Starting test: UpdateExpired
+Running UpdateExpired test
+Finished test: UpdateExpired
+[0;32m[       OK ] [mStoreTests.UpdateExpired (0 ms)
+[0;32m[ RUN      ] [mStoreTests.GetAllWithExpired
+Starting test: GetAllWithExpired
+Running GetAllWithExpired test
+Finished test: GetAllWithExpired
+[0;32m[       OK ] [mStoreTests.GetAllWithExpired (0 ms)
+[0;32m[ RUN      ] [mStoreTests.ThreadSafety
+Starting test: ThreadSafety
+Running ThreadSafety test
+Creating 2 threads
+Creating thread 0
+Creating thread 1
+Thread 0 started
+Thread 0 operation 0
+Thread 0 operation 1
+Waiting for threads to complete
+Thread 1 started
+Thread 1 operation 0
+Thread 0 operation 2
+Thread 0 operation 3
+Thread 0 operation 4
+Thread 0 operation 5
+Thread 0 operation 6
+Thread 0 operation 7
+Thread 0 operation 8
+Thread 0 operation 9
+Thread 0 finished
+Thread 1 operation 1
+Thread 1 operation 2
+Thread 1 operation 3
+Thread 1 operation 4
+Thread 1 operation 5
+Thread 1 operation 6
+Thread 1 operation 7
+Thread 1 operation 8
+Thread 1 operation 9
+Thread 1 finished
+All threads completed
+Found 10 keys in store
+Finished test: ThreadSafety
+[0;32m[       OK ] [mStoreTests.ThreadSafety (0 ms)
+[0;32m[----------] [m12 tests from StoreTests (0 ms total)
 
-[----------] Global test environment tear-down
-[==========] 5 tests from 1 test suite ran. (0 ms total)
-[  PASSED  ] 5 tests.
+[0;32m[----------] [mGlobal test environment tear-down
+[0;32m[==========] [m12 tests from 1 test suite ran. (1 ms total)
+[0;32m[  PASSED  ] [m12 tests.
 <end of output>
 Test time =   0.01 sec
 ----------------------------------------------------------
 Test Passed.
-"store_tests" end time: Jun 07 21:41 CEST
+"store_tests" end time: Jun 07 23:38 CEST
 "store_tests" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-End testing: Jun 07 21:41 CEST
+End testing: Jun 07 23:38 CEST

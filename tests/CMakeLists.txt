@@ -12,3 +12,8 @@ target_link_libraries(store_tests
 )
 
 add_test(NAME store_tests COMMAND store_tests)
+
+set_tests_properties(store_tests PROPERTIES
+    ENVIRONMENT "GTEST_COLOR=1"
+    TIMEOUT 5
+)

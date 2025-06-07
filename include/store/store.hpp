@@ -6,23 +6,54 @@
 #include <vector>
 #include <optional>
 #include <mutex>
+#include <chrono>
+#include <functional>
 
 namespace store {
 
-    class Store {
-        public:
-            Store();
-            ~Store();
+class Store {
+    public:
+        using TimePoint = std::chrono::system_clock::time_point;
+        using TimeProvider = std::function<TimePoint()>;
 
-            bool add(const std::string& key, const std::string& value);
-            bool remove(const std::string& key);
-            bool update(const std::string& key, const std::string& value);
-            std::optional<std::string> get(const std::string& key);
-            std::vector<std::string> getAll();
-        private:
-            std::unordered_map<std::string, std::string> store;
-            std::mutex mutex;
-    };
+        Store(TimeProvider time_provider = std::chrono::system_clock::now)
+            : get_time_(std::move(time_provider)) {}
+        ~Store() = default;
+
+        bool add(const std::string& key, const std::string& value);
+
+        bool remove(const std::string& key);
+
+        bool update(const std::string& key, const std::string& value);
+
+        std::optional<std::string> get(const std::string& key);
+        std::vector<std::string> getAll();
+
+        template<typename Rep, typename Period>
+        bool expire(const std::string& key, std::chrono::duration<Rep, Period> ttl) {
+            return expire_at(key, get_time_() + ttl);
+        }
+
+        bool expire_at(const std::string& key, TimePoint expiry);
+
+        std::optional<std::chrono::seconds> getTTL(const std::string& key);
+
+        bool persist(const std::string& key);
+
+        void cleanupExpired();
+
+    private:
+        std::recursive_mutex mutex;
+        TimeProvider get_time_;
+        struct KeyValue {
+            std::string value;
+            std::optional<TimePoint> expiry;
+        };
+        std::unordered_map<std::string, KeyValue> store;
+
+        bool isExpired(const std::string& key);
+};
+
 }
 
 #endif

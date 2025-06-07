@@ -268,4 +268,6 @@ tests/CMakeFiles/store_tests.dir/store_tests.cpp.o: \
  /mnt/c/Users/Legon/Desktop/cpp-redis-clone/include/store/store.hpp \
  /usr/include/c++/11/mutex /usr/include/c++/11/chrono \
  /usr/include/c++/11/ratio /usr/include/c++/11/bits/std_mutex.h \
- /usr/include/c++/11/bits/unique_lock.h
+ /usr/include/c++/11/bits/unique_lock.h /usr/include/c++/11/thread \
+ /usr/include/c++/11/bits/std_thread.h \
+ /usr/include/c++/11/bits/this_thread_sleep.h
