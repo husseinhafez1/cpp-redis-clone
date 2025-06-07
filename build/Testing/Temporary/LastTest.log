@@ -1,0 +1,37 @@
+Start testing: Jun 07 21:41 CEST
+----------------------------------------------------------
+1/1 Testing: store_tests
+1/1 Test: store_tests
+Command: "/mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/tests/store_tests"
+Directory: /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/tests
+"store_tests" start time: Jun 07 21:41 CEST
+Output:
+----------------------------------------------------------
+Running main() from ./googletest/src/gtest_main.cc
+[==========] Running 5 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 5 tests from StoreTests
+[ RUN      ] StoreTests.AddKeyValue
+[       OK ] StoreTests.AddKeyValue (0 ms)
+[ RUN      ] StoreTests.GetKeyValue
+[       OK ] StoreTests.GetKeyValue (0 ms)
+[ RUN      ] StoreTests.UpdateKeyValue
+[       OK ] StoreTests.UpdateKeyValue (0 ms)
+[ RUN      ] StoreTests.RemoveKeyValue
+[       OK ] StoreTests.RemoveKeyValue (0 ms)
+[ RUN      ] StoreTests.GetAllKeys
+[       OK ] StoreTests.GetAllKeys (0 ms)
+[----------] 5 tests from StoreTests (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 5 tests from 1 test suite ran. (0 ms total)
+[  PASSED  ] 5 tests.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"store_tests" end time: Jun 07 21:41 CEST
+"store_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Jun 07 21:41 CEST
