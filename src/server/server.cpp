@@ -63,15 +63,54 @@ void Server::accept_connections() {
 void Server::handle_client(boost::asio::ip::tcp::socket&& socket) {
     try {
         std::cout << "New client connected" << std::endl;
+        std::string complete_message;
+        
         while (running_) {
             boost::asio::streambuf buffer;
-            boost::asio::read_until(socket, buffer, '\n');
-
-            std::string message = boost::asio::buffer_cast<const char*>(buffer.data());
-            message = message.substr(0, message.length() - 1);
-            auto command = parseCommand(message);
-            std::string response = handleCommand(command);
-            boost::asio::write(socket, boost::asio::buffer(response + "\n"));
+            boost::system::error_code error;
+            std::cout << "Waiting for data..." << std::endl;
+            size_t bytes_read = socket.read_some(boost::asio::buffer(buffer.prepare(1024)), error);
+            if (error) {
+                std::cerr << "Error reading from socket: " << error.message() << std::endl;
+                break;
+            }
+            std::cout << "Read " << bytes_read << " bytes" << std::endl;
+            buffer.commit(bytes_read);
+            
+            std::string chunk = boost::asio::buffer_cast<const char*>(buffer.data());
+            complete_message += chunk;
+            buffer.consume(buffer.size());
+            
+            std::cout << "Current message: [" << complete_message << "]" << std::endl;
+            
+            std::cout << "Attempting to parse message..." << std::endl;
+            size_t pos = 0;
+            auto value = resp::Parser::parse(complete_message, pos);
+            if (!value) {
+                if (complete_message.size() >= 2 && 
+                    complete_message.substr(complete_message.size() - 2) == "\r\n") {
+                    std::cout << "Failed to parse complete message" << std::endl;
+                    complete_message.clear();
+                } else {
+                    std::cout << "Message not complete yet, waiting for more data..." << std::endl;
+                }
+                continue;
+            }
+            
+            std::cout << "Successfully parsed message" << std::endl;
+            
+            auto response = handleCommand(*value);
+            std::string serialized = resp::Parser::serialize(response);
+            std::cout << "Sending response: [" << serialized << "]" << std::endl;
+            
+            size_t written = boost::asio::write(socket, boost::asio::buffer(serialized), error);
+            if (error) {
+                std::cerr << "Error writing response: " << error.message() << std::endl;
+                break;
+            }
+            std::cout << "Wrote " << written << " bytes" << std::endl;
+            
+            complete_message.clear();
         }
     } catch (const std::exception& e) {
         std::cerr << "Error handling client: " << e.what() << std::endl;
@@ -79,36 +118,63 @@ void Server::handle_client(boost::asio::ip::tcp::socket&& socket) {
     std::cout << "Client disconnected" << std::endl;
 }
 
-std::vector<std::string> Server::parseCommand(const std::string& input) {
-    std::vector<std::string> tokens;
-    std::string token;
-    std::istringstream tokenStream(input);
-    while (std::getline(tokenStream, token, ' ')) {
-        if (!token.empty()) {
-            tokens.push_back(token);
+resp::Value Server::handleCommand(const resp::Value& command) {
+    if (!command.holds_alternative<resp::Array>()) {
+        return resp::Value(resp::Error("Invalid command"));
+    }
+    const auto& args = command.get<resp::Array>();
+    if (args.empty()) {
+        return resp::Value(resp::Error("ERR empty command"));
+    }
+    if (!args[0].holds_alternative<resp::BulkString>()) {
+        return resp::Value(resp::Error("ERR invalid command"));
+    }
+    const auto& cmd = *args[0].get<resp::BulkString>();
+    if (cmd == "SET") {
+        if (args.size() != 3) {
+            return resp::Value(resp::Error("ERR wrong number of arguments for SET command"));
         }
+        const auto& key = *args[1].get<resp::BulkString>();
+        const auto& value = *args[2].get<resp::BulkString>();
+        store_.add(key, value);
+        return resp::Value(resp::SimpleString("OK"));
+    } else if (cmd == "GET") {
+        if (args.size() != 2) {
+            return resp::Value(resp::Error("ERR wrong number of arguments for GET command"));
+        }
+        const auto& key = *args[1].get<resp::BulkString>();
+        const auto& value = store_.get(key);
+        if (!value) {
+            return resp::Value(resp::BulkString(std::nullopt));
+        }
+        return resp::Value(resp::BulkString(value));
+    } else if (cmd == "DEL") {
+        if (args.size() != 2) {
+            return resp::Value(resp::Error("ERR invalid arguments"));
+        }
+        const auto& key = *args[1].get<resp::BulkString>();
+        store_.remove(key);
+        return resp::Value(resp::Integer(1));
+    } else if (cmd == "TTL") {
+        if (args.size() != 2) {
+            return resp::Value(resp::Error("ERR invalid arguments"));
+        }
+        const auto& key = *args[1].get<resp::BulkString>();
+        const auto& ttl = store_.getTTL(key);
+        if (!ttl) {
+            return resp::Value(resp::Integer(-1));
+        }
+        return resp::Value(resp::Integer(ttl->count()));
+    } else if (cmd == "PERSIST") {
+        if (args.size() != 2) {
+            return resp::Value(resp::Error("ERR invalid arguments"));
+        }
+        const auto& key = *args[1].get<resp::BulkString>();
+        store_.persist(key);
+        return resp::Value(resp::SimpleString("OK"));
+    } else {
+        return resp::Value(resp::Error("ERR unknown command"));
     }
-    return tokens;
-}
-
-std::string Server::handleCommand(const std::vector<std::string>& command) {
-    if (command.empty()) return "ERROR: Empty command";
-    std::string cmd = command[0];
-    if (cmd == "SET" && command.size() == 3) {
-        store_.add(command[1], command[2]);
-        return "OK";
-    } else if (cmd == "GET" && command.size() == 2) {
-        auto value = store_.get(command[1]);
-        if (!value) return "(nil)";
-        return *value;
-    } else if (cmd == "DEL" && command.size() == 2) {
-        bool deleted = store_.remove(command[1]);
-        return deleted ? "1" : "0";
-    } else if (cmd == "EXISTS" && command.size() == 2) {
-        auto value = store_.get(command[1]);
-        return value ? "1" : "0";
-    }
-    return "ERROR: Unknown command or wrong number of arguments";
 }
 
 }

@@ -1221,6 +1221,8 @@ CMakeFiles/redis-server.dir/src/main.cpp.o
  /usr/include/boost/asio/impl/write_at.hpp
  /mnt/c/Users/Legon/Desktop/cpp-redis-clone/include/store/store.hpp
  /usr/include/c++/11/optional
+ /mnt/c/Users/Legon/Desktop/cpp-redis-clone/include/server/resp.hpp
+ /usr/include/c++/11/variant
  /usr/include/c++/11/iostream
 
 CMakeFiles/redis-server.dir/src/server/server.cpp.o
@@ -2443,6 +2445,8 @@ CMakeFiles/redis-server.dir/src/server/server.cpp.o
  /usr/include/boost/asio/impl/write_at.hpp
  /mnt/c/Users/Legon/Desktop/cpp-redis-clone/include/store/store.hpp
  /usr/include/c++/11/optional
+ /mnt/c/Users/Legon/Desktop/cpp-redis-clone/include/server/resp.hpp
+ /usr/include/c++/11/variant
  /usr/include/c++/11/iostream
 
 CMakeFiles/redis-server.dir/src/store/store.cpp.o

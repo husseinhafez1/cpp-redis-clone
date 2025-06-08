@@ -1220,6 +1220,8 @@ CMakeFiles/redis-server.dir/src/main.cpp.o: ../src/main.cpp \
   /usr/include/boost/asio/impl/write_at.hpp \
   ../include/store/store.hpp \
   /usr/include/c++/11/optional \
+  ../include/server/resp.hpp \
+  /usr/include/c++/11/variant \
   /usr/include/c++/11/iostream
 
 CMakeFiles/redis-server.dir/src/server/server.cpp.o: ../src/server/server.cpp \
@@ -2441,6 +2443,8 @@ CMakeFiles/redis-server.dir/src/server/server.cpp.o: ../src/server/server.cpp \
   /usr/include/boost/asio/impl/write_at.hpp \
   ../include/store/store.hpp \
   /usr/include/c++/11/optional \
+  ../include/server/resp.hpp \
+  /usr/include/c++/11/variant \
   /usr/include/c++/11/iostream
 
 CMakeFiles/redis-server.dir/src/store/store.cpp.o: ../src/store/store.cpp \
@@ -2640,6 +2644,8 @@ CMakeFiles/redis-server.dir/src/store/store.cpp.o: ../src/store/store.cpp \
   /usr/include/c++/11/bits/stl_tempbuf.h \
   /usr/include/c++/11/bits/uniform_int_dist.h
 
+
+/usr/include/c++/11/variant:
 
 /usr/include/c++/11/optional:
 
@@ -4840,6 +4846,8 @@ CMakeFiles/redis-server.dir/src/store/store.cpp.o: ../src/store/store.cpp \
 /usr/include/c++/11/bits/exception_ptr.h:
 
 /usr/include/boost/asio/basic_socket_acceptor.hpp:
+
+../include/server/resp.hpp:
 
 /usr/include/boost/asio/basic_waitable_timer.hpp:
 

@@ -60,14 +60,15 @@ private:
 class Parser {
 public:
     static std::optional<Value> parse(const std::string& input);
+    static std::optional<Value> parse(const std::string& input, size_t& pos);
     static std::string serialize(const Value& value);
 
 private:
-    static std::optional<Value> parseArray(const std::string& input, size_t& pos);
-    static std::optional<Value> parseBulkString(const std::string& input, size_t& pos);
     static std::optional<Value> parseSimpleString(const std::string& input, size_t& pos);
     static std::optional<Value> parseError(const std::string& input, size_t& pos);
     static std::optional<Value> parseInteger(const std::string& input, size_t& pos);
+    static std::optional<Value> parseBulkString(const std::string& input, size_t& pos);
+    static std::optional<Value> parseArray(const std::string& input, size_t& pos);
 };
 
 }

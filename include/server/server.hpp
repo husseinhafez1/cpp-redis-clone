@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 #include <atomic>
 #include <thread>
@@ -7,6 +9,7 @@
 #include <sstream>
 #include <unordered_map>
 #include "store/store.hpp"
+#include "server/resp.hpp"
 
 namespace server {
 class Server {
@@ -32,6 +35,6 @@ private:
     void handle_client(boost::asio::ip::tcp::socket&& socket);
 
     std::vector<std::string> parseCommand(const std::string& input);
-    std::string handleCommand(const std::vector<std::string>& command);
+    resp::Value handleCommand(const resp::Value& command);
 };
 }

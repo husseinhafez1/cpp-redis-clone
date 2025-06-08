@@ -1,22 +1,30 @@
 #include "server/resp.hpp"
 #include <stdexcept>
+#include <iostream>
 
 namespace server {
 namespace resp {
+    static std::optional<Value> parse(const std::string& input, size_t& pos);
+
     std::optional<Value> Parser::parse(const std::string& input) {
-        if (input.empty()) return std::nullopt;
-        
         size_t pos = 0;
-        if (input[0] == '+') {
-            return parseSimpleString(input, pos);
-        } else if (input[0] == '-') {
-            return parseError(input, pos);
-        } else if (input[0] == ':') {
-            return parseInteger(input, pos);
-        } else if (input[0] == '$') {
-            return parseBulkString(input, pos);
-        } else if (input[0] == '*') {
-            return parseArray(input, pos);
+        return Parser::parse(input, pos);
+    }
+
+    std::optional<Value> Parser::parse(const std::string& input, size_t& pos) {
+        if (pos >= input.size()) return std::nullopt;
+        std::cout << "[RESP] parse: pos=" << pos << " input=[" << input.substr(pos) << "]\n";
+        char type = input[pos];
+        if (type == '+') {
+            return Parser::parseSimpleString(input, pos);
+        } else if (type == '-') {
+            return Parser::parseError(input, pos);
+        } else if (type == ':') {
+            return Parser::parseInteger(input, pos);
+        } else if (type == '$') {
+            return Parser::parseBulkString(input, pos);
+        } else if (type == '*') {
+            return Parser::parseArray(input, pos);
         }
         return std::nullopt;
     }
@@ -26,6 +34,7 @@ namespace resp {
         if (end == std::string::npos) return std::nullopt;
         std::string result = input.substr(pos + 1, end - pos - 1);
         pos = end + 2;
+        std::cout << "[RESP] SimpleString: '" << result << "'\n";
         return Value(SimpleString(result));
     }
 
@@ -34,6 +43,7 @@ namespace resp {
         if (end == std::string::npos) return std::nullopt;
         std::string result = input.substr(pos + 1, end - pos - 1);
         pos = end + 2;
+        std::cout << "[RESP] Error: '" << result << "'\n";
         return Value(Error(result));
     }
 
@@ -42,64 +52,73 @@ namespace resp {
         if (end == std::string::npos) return std::nullopt;
         std::string numStr = input.substr(pos + 1, end - pos - 1);
         pos = end + 2;
+        std::cout << "[RESP] Integer: '" << numStr << "'\n";
         return Value(Integer(std::stoll(numStr)));
     }
 
     std::optional<Value> Parser::parseBulkString(const std::string& input, size_t& pos) {
         size_t end = input.find("\r\n", pos);
-        if (end == std::string::npos) return std::nullopt;
+        if (end == std::string::npos) {
+            std::cout << "[RESP] BulkString: waiting for length delimiter\n";
+            return std::nullopt;
+        }
         
-        int length = std::stoi(input.substr(pos + 1, end - pos - 1));
+        std::string length_str = input.substr(pos + 1, end - pos - 1);
+        std::cout << "[RESP] BulkString: length_str='" << length_str << "'\n";
+        int length = std::stoi(length_str);
         pos = end + 2;
         
-        if (length == -1) return Value(BulkString(std::nullopt));
-        if (pos + length + 2 > input.size()) return std::nullopt;
+        if (length == -1) {
+            std::cout << "[RESP] BulkString: null\n";
+            return Value(BulkString(std::nullopt));
+        }
+        
+        if (pos + length + 2 > input.size()) {
+            std::cout << "[RESP] BulkString: waiting for data (need " << length << " bytes)\n";
+            return std::nullopt;
+        }
         
         std::string result = input.substr(pos, length);
-        pos += length + 2;
+        pos += length;
+        
+        if (pos + 2 > input.size() || input.substr(pos, 2) != "\r\n") {
+            std::cout << "[RESP] BulkString: waiting for final delimiter\n";
+            return std::nullopt;
+        }
+        pos += 2;
+        
+        std::cout << "[RESP] BulkString: '" << result << "'\n";
         return Value(BulkString(result));
     }
 
     std::optional<Value> Parser::parseArray(const std::string& input, size_t& pos) {
         size_t end = input.find("\r\n", pos);
-        if (end == std::string::npos) return std::nullopt;
+        if (end == std::string::npos) {
+            std::cout << "[RESP] Array: waiting for length delimiter\n";
+            return std::nullopt;
+        }
         
-        int count = std::stoi(input.substr(pos + 1, end - pos - 1));
+        std::string length_str = input.substr(pos + 1, end - pos - 1);
+        std::cout << "[RESP] Array: length_str='" << length_str << "'\n";
+        int count = std::stoi(length_str);
         pos = end + 2;
+        std::cout << "[RESP] Array: count=" << count << " pos=" << pos << "\n";
         
         Array result;
-        for (int i = 0; i < count; i++) {
-            if (pos >= input.size()) return std::nullopt;
-            
-            size_t elementPos = 0;
-            auto element = parse(input.substr(pos));
-            if (!element) return std::nullopt;
-            
-            result.push_back(*element);
-            size_t elementSize = 0;
-            if (element->holds_alternative<SimpleString>()) {
-                elementSize = element->get<SimpleString>().value.size() + 3;
-            } else if (element->holds_alternative<Error>()) {
-                elementSize = element->get<Error>().value.size() + 3;
-            } else if (element->holds_alternative<Integer>()) {
-                elementSize = std::to_string(element->get<Integer>()).size() + 3;
-            } else if (element->holds_alternative<BulkString>()) {
-                const auto& bulk = element->get<BulkString>();
-                if (!bulk) {
-                    elementSize = 5; // "$-1\r\n"
-                } else {
-                    elementSize = bulk->size() + 5 + std::to_string(bulk->size()).size();
-                }
-            } else if (element->holds_alternative<Array>()) {
-                const auto& array = element->get<Array>();
-                elementSize = std::to_string(array.size()).size() + 3;
-                for (const auto& subElement : array) {
-                    elementSize += subElement.size() + 2;
-                }
+        for (int i = 0; i < count; i++) {   
+            if (pos >= input.size()) {
+                std::cout << "[RESP] Array: waiting for element " << i << " type\n";
+                return std::nullopt;
             }
-            
-            pos += elementSize;
+                    
+            auto element = parse(input, pos);
+            if (!element) {
+                std::cout << "[RESP] Array: failed to parse element " << i << "\n";
+                return std::nullopt;
+            }
+            result.push_back(*element);
         }
+        
         return Value(result);
     }
 

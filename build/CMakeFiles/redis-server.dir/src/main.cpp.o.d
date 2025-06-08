@@ -1115,4 +1115,6 @@ CMakeFiles/redis-server.dir/src/main.cpp.o: \
  /usr/include/boost/asio/write_at.hpp \
  /usr/include/boost/asio/impl/write_at.hpp \
  /mnt/c/Users/Legon/Desktop/cpp-redis-clone/include/store/store.hpp \
- /usr/include/c++/11/optional /usr/include/c++/11/iostream
+ /usr/include/c++/11/optional \
+ /mnt/c/Users/Legon/Desktop/cpp-redis-clone/include/server/resp.hpp \
+ /usr/include/c++/11/variant /usr/include/c++/11/iostream
