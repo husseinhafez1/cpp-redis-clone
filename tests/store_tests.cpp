@@ -60,15 +60,9 @@ TEST_F(StoreTests, Expiry) {
     EXPECT_TRUE(store.add("key1", "value1"));
     EXPECT_TRUE(store.add("key2", "value2"));
     EXPECT_TRUE(store.add("key3", "value3"));
-    
-    // Set expiry for key1 and key2
     EXPECT_TRUE(store.setExpiry("key1", std::chrono::seconds(1)));
     EXPECT_TRUE(store.setExpiry("key2", std::chrono::seconds(2)));
-    
-    // Advance time by 1.5 seconds
     advance_time(std::chrono::milliseconds(1500));
-    
-    // key1 should be expired, key2 should still be valid
     EXPECT_EQ(store.get("key1"), std::nullopt);
     EXPECT_EQ(store.get("key2"), "value2");
     EXPECT_EQ(store.get("key3"), "value3");
