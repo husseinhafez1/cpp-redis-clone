@@ -196,6 +196,28 @@ resp::Value Server::handleCommand(const resp::Value& command) {
                 return resp::BulkString{std::nullopt};
             }
         }
+        else if (cmd == "DEL") {
+            if (array.size() != 2) {
+                return resp::Error{"ERR wrong number of arguments for DEL command"};
+            }
+            
+            std::string key;
+            if (array[1].holds_alternative<resp::BulkString>()) {
+                const auto& bulk = array[1].get<resp::BulkString>();
+                if (!bulk) {
+                    return resp::Error{"ERR invalid key"};
+                }
+                key = *bulk;
+            } else {
+                return resp::Error{"ERR invalid key"};
+            }
+            
+            if (store_.remove(key)) {
+                return resp::Integer{1};
+            } else {
+                return resp::Integer{0};
+            }
+        }
         else {
             return resp::Error{"ERR unknown command"};
         }
