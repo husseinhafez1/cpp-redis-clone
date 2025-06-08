@@ -215,6 +215,30 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/server/aof_manager.o: src/server/aof_manager.cpp.o
+.PHONY : src/server/aof_manager.o
+
+# target to build an object file
+src/server/aof_manager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/src/server/aof_manager.cpp.o
+.PHONY : src/server/aof_manager.cpp.o
+
+src/server/aof_manager.i: src/server/aof_manager.cpp.i
+.PHONY : src/server/aof_manager.i
+
+# target to preprocess a source file
+src/server/aof_manager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/src/server/aof_manager.cpp.i
+.PHONY : src/server/aof_manager.cpp.i
+
+src/server/aof_manager.s: src/server/aof_manager.cpp.s
+.PHONY : src/server/aof_manager.s
+
+# target to generate assembly for a file
+src/server/aof_manager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/src/server/aof_manager.cpp.s
+.PHONY : src/server/aof_manager.cpp.s
+
 src/server/resp.o: src/server/resp.cpp.o
 .PHONY : src/server/resp.o
 
@@ -307,6 +331,9 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/server/aof_manager.o"
+	@echo "... src/server/aof_manager.i"
+	@echo "... src/server/aof_manager.s"
 	@echo "... src/server/resp.o"
 	@echo "... src/server/resp.i"
 	@echo "... src/server/resp.s"

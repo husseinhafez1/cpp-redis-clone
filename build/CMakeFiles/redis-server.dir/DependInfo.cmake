@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/mnt/c/Users/Legon/Desktop/cpp-redis-clone/src/main.cpp" "CMakeFiles/redis-server.dir/src/main.cpp.o" "gcc" "CMakeFiles/redis-server.dir/src/main.cpp.o.d"
+  "/mnt/c/Users/Legon/Desktop/cpp-redis-clone/src/server/aof_manager.cpp" "CMakeFiles/redis-server.dir/src/server/aof_manager.cpp.o" "gcc" "CMakeFiles/redis-server.dir/src/server/aof_manager.cpp.o.d"
   "/mnt/c/Users/Legon/Desktop/cpp-redis-clone/src/server/server.cpp" "CMakeFiles/redis-server.dir/src/server/server.cpp.o" "gcc" "CMakeFiles/redis-server.dir/src/server/server.cpp.o.d"
   "/mnt/c/Users/Legon/Desktop/cpp-redis-clone/src/store/store.cpp" "CMakeFiles/redis-server.dir/src/store/store.cpp.o" "gcc" "CMakeFiles/redis-server.dir/src/store/store.cpp.o.d"
   )

@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include "store/store.hpp"
 #include "server/resp.hpp"
+#include "server/aof_manager.hpp"
 
 namespace server {
 class Server {
@@ -22,6 +23,7 @@ public:
 
 private:
     store::Store store_;
+    server::AOFManager aof_manager_;
     std::string host_;
     unsigned short port_;
 

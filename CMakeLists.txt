@@ -22,6 +22,7 @@ add_executable(redis-server
     src/main.cpp
     src/server/server.cpp
     src/store/store.cpp
+    src/server/aof_manager.cpp
 )
 
 # Include directories

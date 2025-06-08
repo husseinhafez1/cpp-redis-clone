@@ -1117,4 +1117,9 @@ CMakeFiles/redis-server.dir/src/main.cpp.o: \
  /mnt/c/Users/Legon/Desktop/cpp-redis-clone/include/store/store.hpp \
  /usr/include/c++/11/optional \
  /mnt/c/Users/Legon/Desktop/cpp-redis-clone/include/server/resp.hpp \
- /usr/include/c++/11/variant /usr/include/c++/11/iostream
+ /usr/include/c++/11/variant \
+ /mnt/c/Users/Legon/Desktop/cpp-redis-clone/include/server/aof_manager.hpp \
+ /usr/include/c++/11/fstream /usr/include/c++/11/bits/codecvt.h \
+ /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
+ /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
+ /usr/include/c++/11/bits/fstream.tcc /usr/include/c++/11/iostream

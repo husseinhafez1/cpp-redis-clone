@@ -20,6 +20,13 @@ def test_commands():
     get_cmd = b'*2\r\n$3\r\nGET\r\n$3\r\nkey\r\n'
     send_resp_command(get_cmd)
     
+    print("\nTesting PERSIST command...")
+    persist_cmd = b'*2\r\n$7\r\nPERSIST\r\n$3\r\nkey\r\n'
+    send_resp_command(persist_cmd)
+    
+    print("\nTesting GET after PERSIST...")
+    send_resp_command(get_cmd)
+    
     print("\nTesting DEL command...")
     del_cmd = b'*2\r\n$3\r\nDEL\r\n$3\r\nkey\r\n'
     send_resp_command(del_cmd)

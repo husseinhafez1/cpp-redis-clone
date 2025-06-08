@@ -13,20 +13,38 @@ namespace resp {
 
     std::optional<Value> Parser::parse(const std::string& input, size_t& pos) {
         if (pos >= input.size()) return std::nullopt;
-        std::cout << "[RESP] parse: pos=" << pos << " input=[" << input.substr(pos) << "]\n";
-        char type = input[pos];
-        if (type == '+') {
-            return Parser::parseSimpleString(input, pos);
-        } else if (type == '-') {
-            return Parser::parseError(input, pos);
-        } else if (type == ':') {
-            return Parser::parseInteger(input, pos);
-        } else if (type == '$') {
-            return Parser::parseBulkString(input, pos);
-        } else if (type == '*') {
-            return Parser::parseArray(input, pos);
+        
+        // Add a maximum parse depth to prevent stack overflow
+        static const size_t MAX_PARSE_DEPTH = 100;
+        static thread_local size_t parse_depth = 0;
+        
+        if (++parse_depth > MAX_PARSE_DEPTH) {
+            parse_depth = 0;
+            return std::nullopt;
         }
-        return std::nullopt;
+        
+        char type = input[pos];
+        std::optional<Value> result;
+        
+        try {
+            if (type == '+') {
+                result = Parser::parseSimpleString(input, pos);
+            } else if (type == '-') {
+                result = Parser::parseError(input, pos);
+            } else if (type == ':') {
+                result = Parser::parseInteger(input, pos);
+            } else if (type == '$') {
+                result = Parser::parseBulkString(input, pos);
+            } else if (type == '*') {
+                result = Parser::parseArray(input, pos);
+            }
+        } catch (const std::exception& e) {
+            parse_depth = 0;
+            return std::nullopt;
+        }
+        
+        parse_depth = 0;
+        return result;
     }
 
     std::optional<Value> Parser::parseSimpleString(const std::string& input, size_t& pos) {
