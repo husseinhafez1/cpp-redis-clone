@@ -127,6 +127,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named redis-server
+
+# Build rule for target.
+redis-server: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 redis-server
+.PHONY : redis-server
+
+# fast build rule for target.
+redis-server/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/build
+.PHONY : redis-server/fast
+
+#=============================================================================
 # Target rules for targets named store
 
 # Build rule for target.
@@ -152,11 +165,60 @@ store_tests/fast:
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/store_tests.dir/build.make tests/CMakeFiles/store_tests.dir/build
 .PHONY : store_tests/fast
 
+src/main.o: src/main.cpp.o
+.PHONY : src/main.o
+
+# target to build an object file
+src/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/src/main.cpp.o
+.PHONY : src/main.cpp.o
+
+src/main.i: src/main.cpp.i
+.PHONY : src/main.i
+
+# target to preprocess a source file
+src/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/src/main.cpp.i
+.PHONY : src/main.cpp.i
+
+src/main.s: src/main.cpp.s
+.PHONY : src/main.s
+
+# target to generate assembly for a file
+src/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/src/main.cpp.s
+.PHONY : src/main.cpp.s
+
+src/server/server.o: src/server/server.cpp.o
+.PHONY : src/server/server.o
+
+# target to build an object file
+src/server/server.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/src/server/server.cpp.o
+.PHONY : src/server/server.cpp.o
+
+src/server/server.i: src/server/server.cpp.i
+.PHONY : src/server/server.i
+
+# target to preprocess a source file
+src/server/server.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/src/server/server.cpp.i
+.PHONY : src/server/server.cpp.i
+
+src/server/server.s: src/server/server.cpp.s
+.PHONY : src/server/server.s
+
+# target to generate assembly for a file
+src/server/server.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/src/server/server.cpp.s
+.PHONY : src/server/server.cpp.s
+
 src/store/store.o: src/store/store.cpp.o
 .PHONY : src/store/store.o
 
 # target to build an object file
 src/store/store.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/src/store/store.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/store.dir/build.make CMakeFiles/store.dir/src/store/store.cpp.o
 .PHONY : src/store/store.cpp.o
 
@@ -165,6 +227,7 @@ src/store/store.i: src/store/store.cpp.i
 
 # target to preprocess a source file
 src/store/store.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/src/store/store.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/store.dir/build.make CMakeFiles/store.dir/src/store/store.cpp.i
 .PHONY : src/store/store.cpp.i
 
@@ -173,6 +236,7 @@ src/store/store.s: src/store/store.cpp.s
 
 # target to generate assembly for a file
 src/store/store.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/src/store/store.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/store.dir/build.make CMakeFiles/store.dir/src/store/store.cpp.s
 .PHONY : src/store/store.cpp.s
 
@@ -185,8 +249,15 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... test"
+	@echo "... redis-server"
 	@echo "... store"
 	@echo "... store_tests"
+	@echo "... src/main.o"
+	@echo "... src/main.i"
+	@echo "... src/main.s"
+	@echo "... src/server/server.o"
+	@echo "... src/server/server.i"
+	@echo "... src/server/server.s"
 	@echo "... src/store/store.o"
 	@echo "... src/store/store.i"
 	@echo "... src/store/store.s"

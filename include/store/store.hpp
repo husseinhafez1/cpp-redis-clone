@@ -1,6 +1,3 @@
-#ifndef STORE_STORE_HPP
-#define STORE_STORE_HPP
-
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -60,5 +57,3 @@ class Store {
 };
 
 }
-
-#endif
