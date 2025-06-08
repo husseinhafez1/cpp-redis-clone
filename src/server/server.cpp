@@ -26,6 +26,7 @@ Server::~Server() {
 void Server::start() {
     if (running_) return;
     running_ = true;
+    store_.startCleanupThread(std::chrono::seconds(60));
     std::cout << "Server starting on " << host_ << ":" << port_ << std::endl;
     accept_connections();
     io_context_.run();
@@ -34,6 +35,7 @@ void Server::start() {
 void Server::stop() {
     if (!running_) return;
     running_ = false;
+    store_.stopCleanupThread();
     io_context_.stop();
     for (auto& thread : threads_) {
         if (thread.joinable()) {
@@ -119,62 +121,95 @@ void Server::handle_client(boost::asio::ip::tcp::socket&& socket) {
 }
 
 resp::Value Server::handleCommand(const resp::Value& command) {
-    if (!command.holds_alternative<resp::Array>()) {
-        return resp::Value(resp::Error("Invalid command"));
+    // First check if it's an array
+    if (command.holds_alternative<resp::Array>()) {
+        const auto& array = command.get<resp::Array>();
+        if (array.empty()) {
+            return resp::Error{"ERR empty command"};
+        }
+        
+        // Get the command name from the first element
+        std::string cmd;
+        if (array[0].holds_alternative<resp::BulkString>()) {
+            const auto& bulk = array[0].get<resp::BulkString>();
+            if (!bulk) {
+                return resp::Error{"ERR invalid command"};
+            }
+            cmd = *bulk;
+        } else {
+            return resp::Error{"ERR invalid command"};
+        }
+        
+        // Convert command to uppercase
+        std::transform(cmd.begin(), cmd.end(), cmd.begin(), ::toupper);
+        
+        if (cmd == "SET") {
+            if (array.size() < 3) {
+                return resp::Error{"ERR wrong number of arguments for SET command"};
+            }
+            
+            // Get key from second element
+            std::string key;
+            if (array[1].holds_alternative<resp::BulkString>()) {
+                const auto& bulk = array[1].get<resp::BulkString>();
+                if (!bulk) {
+                    return resp::Error{"ERR invalid key"};
+                }
+                key = *bulk;
+            } else {
+                return resp::Error{"ERR invalid key"};
+            }
+            
+            // Get value from third element
+            std::string value;
+            if (array[2].holds_alternative<resp::BulkString>()) {
+                const auto& bulk = array[2].get<resp::BulkString>();
+                if (!bulk) {
+                    return resp::Error{"ERR invalid value"};
+                }
+                value = *bulk;
+            } else {
+                return resp::Error{"ERR invalid value"};
+            }
+            
+            // Try to add the key-value pair
+            if (store_.add(key, value)) {
+                return resp::SimpleString{"OK"};
+            } else {
+                return resp::Error{"ERR key already exists"};
+            }
+        }
+        else if (cmd == "GET") {
+            if (array.size() != 2) {
+                return resp::Error{"ERR wrong number of arguments for GET command"};
+            }
+            
+            // Get key from second element
+            std::string key;
+            if (array[1].holds_alternative<resp::BulkString>()) {
+                const auto& bulk = array[1].get<resp::BulkString>();
+                if (!bulk) {
+                    return resp::Error{"ERR invalid key"};
+                }
+                key = *bulk;
+            } else {
+                return resp::Error{"ERR invalid key"};
+            }
+            
+            // Try to get the value
+            auto value = store_.get(key);
+            if (value) {
+                return resp::BulkString{*value};
+            } else {
+                return resp::BulkString{std::nullopt};
+            }
+        }
+        else {
+            return resp::Error{"ERR unknown command"};
+        }
     }
-    const auto& args = command.get<resp::Array>();
-    if (args.empty()) {
-        return resp::Value(resp::Error("ERR empty command"));
-    }
-    if (!args[0].holds_alternative<resp::BulkString>()) {
-        return resp::Value(resp::Error("ERR invalid command"));
-    }
-    const auto& cmd = *args[0].get<resp::BulkString>();
-    if (cmd == "SET") {
-        if (args.size() != 3) {
-            return resp::Value(resp::Error("ERR wrong number of arguments for SET command"));
-        }
-        const auto& key = *args[1].get<resp::BulkString>();
-        const auto& value = *args[2].get<resp::BulkString>();
-        store_.add(key, value);
-        return resp::Value(resp::SimpleString("OK"));
-    } else if (cmd == "GET") {
-        if (args.size() != 2) {
-            return resp::Value(resp::Error("ERR wrong number of arguments for GET command"));
-        }
-        const auto& key = *args[1].get<resp::BulkString>();
-        const auto& value = store_.get(key);
-        if (!value) {
-            return resp::Value(resp::BulkString(std::nullopt));
-        }
-        return resp::Value(resp::BulkString(value));
-    } else if (cmd == "DEL") {
-        if (args.size() != 2) {
-            return resp::Value(resp::Error("ERR invalid arguments"));
-        }
-        const auto& key = *args[1].get<resp::BulkString>();
-        store_.remove(key);
-        return resp::Value(resp::Integer(1));
-    } else if (cmd == "TTL") {
-        if (args.size() != 2) {
-            return resp::Value(resp::Error("ERR invalid arguments"));
-        }
-        const auto& key = *args[1].get<resp::BulkString>();
-        const auto& ttl = store_.getTTL(key);
-        if (!ttl) {
-            return resp::Value(resp::Integer(-1));
-        }
-        return resp::Value(resp::Integer(ttl->count()));
-    } else if (cmd == "PERSIST") {
-        if (args.size() != 2) {
-            return resp::Value(resp::Error("ERR invalid arguments"));
-        }
-        const auto& key = *args[1].get<resp::BulkString>();
-        store_.persist(key);
-        return resp::Value(resp::SimpleString("OK"));
-    } else {
-        return resp::Value(resp::Error("ERR unknown command"));
-    }
+    
+    return resp::Error{"ERR invalid command"};
 }
 
 }

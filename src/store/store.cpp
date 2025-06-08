@@ -1,6 +1,30 @@
 #include "store/store.hpp"
+#include <thread>
+#include <chrono>
 
 namespace store {
+
+    void Store::startCleanupThread(std::chrono::seconds interval) {
+        if (running_) return;
+        running_ = true;
+        cleanup_thread_ = std::thread(&Store::cleanupLoop, this, interval);
+    }
+
+    void Store::stopCleanupThread() {
+        if (!running_) return;
+        running_ = false;
+        if (cleanup_thread_.joinable()) {
+            cleanup_thread_.join();
+        }
+    }
+
+    void Store::cleanupLoop(std::chrono::seconds interval) {
+        while (running_) {
+            std::this_thread::sleep_for(interval);
+            if (!running_) break;
+            cleanupExpired();
+        }
+    }
 
     bool Store::add(const std::string& key, const std::string& value) {
         std::lock_guard<std::recursive_mutex> lock(mutex);
@@ -95,5 +119,14 @@ namespace store {
                 ++it;
             }
         }
+    }
+
+    bool Store::setExpiry(const std::string& key, std::chrono::seconds ttl) {
+        std::lock_guard<std::recursive_mutex> lock(mutex);
+        if (store.find(key) == store.end()) {
+            return false;
+        }
+        store[key].expiry = get_time_() + ttl;
+        return true;
     }
 }

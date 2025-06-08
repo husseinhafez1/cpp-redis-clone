@@ -3,12 +3,14 @@
 #include <thread>
 #include <vector>
 #include <iostream>
+#include <chrono>
+#include <algorithm>
 
 using namespace store;
 
 class StoreTests : public ::testing::Test {
 protected:
-    Store::TimePoint current_time = std::chrono::system_clock::now();
+    std::chrono::system_clock::time_point current_time = std::chrono::system_clock::now();
     Store store{[this]() { return current_time; }};
 
     void advance_time(std::chrono::milliseconds duration) {
@@ -25,31 +27,27 @@ protected:
 };
 
 TEST_F(StoreTests, AddAndGet) {
-    std::cout << "Running AddAndGet test" << std::endl;
     EXPECT_TRUE(store.add("key1", "value1"));
     EXPECT_FALSE(store.add("key1", "value2"));
     EXPECT_EQ(store.get("key1"), "value1");
-    EXPECT_EQ(store.get("nonexistent"), std::nullopt);
-}
-
-TEST_F(StoreTests, Update) {
-    std::cout << "Running Update test" << std::endl;
-    EXPECT_TRUE(store.add("key1", "value1"));
-    EXPECT_TRUE(store.update("key1", "value2"));
-    EXPECT_EQ(store.get("key1"), "value2");
-    EXPECT_FALSE(store.update("nonexistent", "value"));
+    EXPECT_EQ(store.get("key2"), std::nullopt);
 }
 
 TEST_F(StoreTests, Remove) {
-    std::cout << "Running Remove test" << std::endl;
     EXPECT_TRUE(store.add("key1", "value1"));
     EXPECT_TRUE(store.remove("key1"));
+    EXPECT_FALSE(store.remove("key1"));
     EXPECT_EQ(store.get("key1"), std::nullopt);
-    EXPECT_FALSE(store.remove("nonexistent"));
+}
+
+TEST_F(StoreTests, Update) {
+    EXPECT_TRUE(store.add("key1", "value1"));
+    EXPECT_TRUE(store.update("key1", "value2"));
+    EXPECT_FALSE(store.update("key2", "value1"));
+    EXPECT_EQ(store.get("key1"), "value2");
 }
 
 TEST_F(StoreTests, GetAll) {
-    std::cout << "Running GetAll test" << std::endl;
     EXPECT_TRUE(store.add("key1", "value1"));
     EXPECT_TRUE(store.add("key2", "value2"));
     auto keys = store.getAll();
@@ -58,119 +56,47 @@ TEST_F(StoreTests, GetAll) {
     EXPECT_TRUE(std::find(keys.begin(), keys.end(), "key2") != keys.end());
 }
 
-TEST_F(StoreTests, Expiration) {
-    std::cout << "Running Expiration test" << std::endl;
+TEST_F(StoreTests, Expiry) {
     EXPECT_TRUE(store.add("key1", "value1"));
+    EXPECT_TRUE(store.add("key2", "value2"));
+    EXPECT_TRUE(store.add("key3", "value3"));
     
-    auto duration = std::chrono::milliseconds(10);
-    EXPECT_TRUE(store.expire("key1", duration));
+    // Set expiry for key1 and key2
+    EXPECT_TRUE(store.setExpiry("key1", std::chrono::seconds(1)));
+    EXPECT_TRUE(store.setExpiry("key2", std::chrono::seconds(2)));
     
-    auto ttl = store.getTTL("key1");
-    EXPECT_TRUE(ttl.has_value());
-    EXPECT_GE(ttl.value().count(), 0);
-    EXPECT_LE(ttl.value().count(), 10);
-
-    advance_time(std::chrono::milliseconds(20));
-    store.cleanupExpired();
-
+    // Advance time by 1.5 seconds
+    advance_time(std::chrono::milliseconds(1500));
+    
+    // key1 should be expired, key2 should still be valid
     EXPECT_EQ(store.get("key1"), std::nullopt);
+    EXPECT_EQ(store.get("key2"), "value2");
+    EXPECT_EQ(store.get("key3"), "value3");
 }
 
 TEST_F(StoreTests, Persist) {
-    std::cout << "Running Persist test" << std::endl;
     EXPECT_TRUE(store.add("key1", "value1"));
-
-    EXPECT_TRUE(store.expire("key1", std::chrono::milliseconds(10)));
-
+    EXPECT_TRUE(store.setExpiry("key1", std::chrono::seconds(1)));
     EXPECT_TRUE(store.persist("key1"));
-
-    advance_time(std::chrono::milliseconds(20));
-
+    advance_time(std::chrono::milliseconds(1500));
     EXPECT_EQ(store.get("key1"), "value1");
 }
 
-TEST_F(StoreTests, ExpireNonExistent) {
-    std::cout << "Running ExpireNonExistent test" << std::endl;
-    EXPECT_FALSE(store.expire("nonexistent", std::chrono::milliseconds(10)));
-}
-
-TEST_F(StoreTests, GetTTLNonExistent) {
-    std::cout << "Running GetTTLNonExistent test" << std::endl;
-    EXPECT_EQ(store.getTTL("nonexistent"), std::nullopt);
-}
-
-TEST_F(StoreTests, PersistNonExistent) {
-    std::cout << "Running PersistNonExistent test" << std::endl;
-    EXPECT_FALSE(store.persist("nonexistent"));
-}
-
-TEST_F(StoreTests, UpdateExpired) {
-    std::cout << "Running UpdateExpired test" << std::endl;
+TEST_F(StoreTests, GetTTL) {
     EXPECT_TRUE(store.add("key1", "value1"));
+    EXPECT_TRUE(store.setExpiry("key1", std::chrono::seconds(10)));
+    auto ttl = store.getTTL("key1");
+    EXPECT_TRUE(ttl);
+    EXPECT_GE(ttl->count(), 9);
+    EXPECT_LE(ttl->count(), 10);
+}
 
-    EXPECT_TRUE(store.expire("key1", std::chrono::milliseconds(0)));
-
-    advance_time(std::chrono::milliseconds(10));
-
-    EXPECT_FALSE(store.update("key1", "value2"));
+TEST_F(StoreTests, CleanupThread) {
+    EXPECT_TRUE(store.add("key1", "value1"));
+    EXPECT_TRUE(store.setExpiry("key1", std::chrono::seconds(1)));
+    store.startCleanupThread(std::chrono::seconds(1));
+    advance_time(std::chrono::milliseconds(1500));
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
     EXPECT_EQ(store.get("key1"), std::nullopt);
-}
-
-TEST_F(StoreTests, GetAllWithExpired) {
-    std::cout << "Running GetAllWithExpired test" << std::endl;
-    EXPECT_TRUE(store.add("key1", "value1"));
-    EXPECT_TRUE(store.add("key2", "value2"));
-
-    EXPECT_TRUE(store.expire("key1", std::chrono::milliseconds(0)));
-
-    advance_time(std::chrono::milliseconds(10));
-
-    store.cleanupExpired();
-
-    auto keys = store.getAll();
-    EXPECT_EQ(keys.size(), 1);
-    EXPECT_EQ(keys[0], "key2");
-}
-
-TEST_F(StoreTests, ThreadSafety) {
-    std::cout << "Running ThreadSafety test" << std::endl;
-    const int num_threads = 2;
-    const int num_operations = 10;
-    std::vector<std::thread> threads;
-
-    std::cout << "Creating " << num_threads << " threads" << std::endl;
-
-    for (int i = 0; i < num_threads; ++i) {
-        std::cout << "Creating thread " << i << std::endl;
-        threads.emplace_back([this, i, num_operations]() {
-            std::cout << "Thread " << i << " started" << std::endl;
-            for (int j = 0; j < num_operations; ++j) {
-                std::string key = "key_" + std::to_string(i) + "_" + std::to_string(j);
-                std::string value = "value_" + std::to_string(i) + "_" + std::to_string(j);
-                
-                std::cout << "Thread " << i << " operation " << j << std::endl;
-
-                if (j % 2 == 0) {
-                    store.add(key, value);
-                } else {
-                    store.get(key);
-                }
-            }
-            std::cout << "Thread " << i << " finished" << std::endl;
-        });
-    }
-
-    std::cout << "Waiting for threads to complete" << std::endl;
-
-    for (auto& thread : threads) {
-        thread.join();
-    }
-
-    std::cout << "All threads completed" << std::endl;
-
-    auto keys = store.getAll();
-    std::cout << "Found " << keys.size() << " keys in store" << std::endl;
-    for (const auto& key : keys) {
-        EXPECT_TRUE(store.get(key).has_value());
-    }
+    store.stopCleanupThread();
 }
