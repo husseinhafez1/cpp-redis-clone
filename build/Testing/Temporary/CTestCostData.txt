@@ -1,2 +1,2 @@
-store_tests 2 0.00320035
+store_tests 5 0.0014615
 ---
