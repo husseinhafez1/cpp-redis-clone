@@ -339,8 +339,12 @@ tests/CMakeFiles/store_tests.dir/store_tests.cpp.o: ../tests/store_tests.cpp \
   /usr/include/c++/11/bits/unique_lock.h \
   /usr/include/c++/11/thread \
   /usr/include/c++/11/bits/std_thread.h \
-  /usr/include/c++/11/bits/this_thread_sleep.h
+  /usr/include/c++/11/bits/this_thread_sleep.h \
+  /usr/include/c++/11/algorithm \
+  /usr/include/c++/11/pstl/glue_algorithm_defs.h
 
+
+/usr/include/c++/11/algorithm:
 
 /usr/include/c++/11/bits/std_mutex.h:
 
@@ -903,6 +907,8 @@ tests/CMakeFiles/store_tests.dir/store_tests.cpp.o: ../tests/store_tests.cpp \
 /usr/include/c++/11/utility:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/error_constants.h:
+
+/usr/include/c++/11/pstl/glue_algorithm_defs.h:
 
 /usr/include/c++/11/stdexcept:
 
