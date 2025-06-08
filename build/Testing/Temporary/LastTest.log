@@ -1,10 +1,10 @@
-Start testing: Jun 08 02:43 CEST
+Start testing: Jun 08 03:07 CEST
 ----------------------------------------------------------
 1/1 Testing: store_tests
 1/1 Test: store_tests
 Command: "/mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/tests/store_tests"
 Directory: /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/tests
-"store_tests" start time: Jun 08 02:43 CEST
+"store_tests" start time: Jun 08 03:07 CEST
 Output:
 ----------------------------------------------------------
 Running main() from ./googletest/src/gtest_main.cc
@@ -76,16 +76,18 @@ Thread 0 started
 Thread 0 operation 0
 Thread 0 operation 1
 Thread 0 operation 2
+Thread 0 operation 3
+Thread 0 operation 4
+Thread 0 operation 5
+Thread 0 operation 6
+Thread 0 operation 7
+Thread 0 operation 8
+Thread 0 operation 9
+Thread 0 finished
 Waiting for threads to complete
 Thread 1 started
 Thread 1 operation 0
-Thread 0 operation 3
-Thread 0 operation 4Thread 
-1Thread 0 operation  operation 5
-Thread 0 operation 6
-Thread 0 operation 7
-1Thread 0 operation 8
-
+Thread 1 operation 1
 Thread 1 operation 2
 Thread 1 operation 3
 Thread 1 operation 4
@@ -95,8 +97,6 @@ Thread 1 operation 7
 Thread 1 operation 8
 Thread 1 operation 9
 Thread 1 finished
-Thread 0 operation 9
-Thread 0 finished
 All threads completed
 Found 10 keys in store
 Finished test: ThreadSafety
@@ -110,8 +110,8 @@ Finished test: ThreadSafety
 Test time =   0.01 sec
 ----------------------------------------------------------
 Test Passed.
-"store_tests" end time: Jun 08 02:43 CEST
+"store_tests" end time: Jun 08 03:07 CEST
 "store_tests" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-End testing: Jun 08 02:43 CEST
+End testing: Jun 08 03:07 CEST
