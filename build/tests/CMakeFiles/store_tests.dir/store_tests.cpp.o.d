@@ -270,4 +270,6 @@ tests/CMakeFiles/store_tests.dir/store_tests.cpp.o: \
  /usr/include/c++/11/ratio /usr/include/c++/11/bits/std_mutex.h \
  /usr/include/c++/11/bits/unique_lock.h /usr/include/c++/11/thread \
  /usr/include/c++/11/bits/std_thread.h \
- /usr/include/c++/11/bits/this_thread_sleep.h
+ /usr/include/c++/11/bits/this_thread_sleep.h \
+ /usr/include/c++/11/algorithm \
+ /usr/include/c++/11/pstl/glue_algorithm_defs.h
