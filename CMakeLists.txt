@@ -8,6 +8,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Boost REQUIRED COMPONENTS system)
 include_directories(${Boost_INCLUDE_DIRS})
 
+# Create RESP library
+add_library(resp
+    src/server/resp.cpp
+)
+
+target_include_directories(resp PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
 # Add executable
 add_executable(redis-server 
     src/main.cpp
@@ -21,10 +30,11 @@ target_include_directories(redis-server PRIVATE
     ${Boost_INCLUDE_DIRS}
 )
 
-# Link Boost
+# Link libraries
 target_link_libraries(redis-server PRIVATE 
     ${Boost_LIBRARIES}
     pthread
+    resp
 )
 
 if(MSVC)

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libresp.a CMakeFiles/resp.dir/src/server/resp.cpp.o
+/usr/bin/ranlib libresp.a

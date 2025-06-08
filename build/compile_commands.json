@@ -8,5 +8,10 @@
   "directory": "/mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/tests",
   "command": "/usr/bin/c++  -I/mnt/c/Users/Legon/Desktop/cpp-redis-clone/include -Wall -Wextra -Wpedantic -Werror -DGTEST_HAS_PTHREAD=1 -std=gnu++17 -o CMakeFiles/store_tests.dir/store_tests.cpp.o -c /mnt/c/Users/Legon/Desktop/cpp-redis-clone/tests/store_tests.cpp",
   "file": "/mnt/c/Users/Legon/Desktop/cpp-redis-clone/tests/store_tests.cpp"
+},
+{
+  "directory": "/mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/tests",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/Legon/Desktop/cpp-redis-clone/include -Wall -Wextra -Wpedantic -Werror -DGTEST_HAS_PTHREAD=1 -std=gnu++17 -o CMakeFiles/resp_tests.dir/resp_tests.cpp.o -c /mnt/c/Users/Legon/Desktop/cpp-redis-clone/tests/resp_tests.cpp",
+  "file": "/mnt/c/Users/Legon/Desktop/cpp-redis-clone/tests/resp_tests.cpp"
 }
 ]

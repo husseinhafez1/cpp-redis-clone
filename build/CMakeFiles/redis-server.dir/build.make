@@ -125,6 +125,7 @@ redis-server: CMakeFiles/redis-server.dir/src/server/server.cpp.o
 redis-server: CMakeFiles/redis-server.dir/src/store/store.cpp.o
 redis-server: CMakeFiles/redis-server.dir/build.make
 redis-server: /usr/lib/x86_64-linux-gnu/libboost_system.so.1.74.0
+redis-server: libresp.a
 redis-server: CMakeFiles/redis-server.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable redis-server"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/redis-server.dir/link.txt --verbose=$(VERBOSE)

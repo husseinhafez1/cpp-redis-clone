@@ -140,6 +140,44 @@ store_tests/fast:
 	cd /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/store_tests.dir/build.make tests/CMakeFiles/store_tests.dir/build
 .PHONY : store_tests/fast
 
+# Convenience name for target.
+tests/CMakeFiles/resp_tests.dir/rule:
+	cd /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/resp_tests.dir/rule
+.PHONY : tests/CMakeFiles/resp_tests.dir/rule
+
+# Convenience name for target.
+resp_tests: tests/CMakeFiles/resp_tests.dir/rule
+.PHONY : resp_tests
+
+# fast build rule for target.
+resp_tests/fast:
+	cd /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/resp_tests.dir/build.make tests/CMakeFiles/resp_tests.dir/build
+.PHONY : resp_tests/fast
+
+resp_tests.o: resp_tests.cpp.o
+.PHONY : resp_tests.o
+
+# target to build an object file
+resp_tests.cpp.o:
+	cd /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/resp_tests.dir/build.make tests/CMakeFiles/resp_tests.dir/resp_tests.cpp.o
+.PHONY : resp_tests.cpp.o
+
+resp_tests.i: resp_tests.cpp.i
+.PHONY : resp_tests.i
+
+# target to preprocess a source file
+resp_tests.cpp.i:
+	cd /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/resp_tests.dir/build.make tests/CMakeFiles/resp_tests.dir/resp_tests.cpp.i
+.PHONY : resp_tests.cpp.i
+
+resp_tests.s: resp_tests.cpp.s
+.PHONY : resp_tests.s
+
+# target to generate assembly for a file
+resp_tests.cpp.s:
+	cd /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/resp_tests.dir/build.make tests/CMakeFiles/resp_tests.dir/resp_tests.cpp.s
+.PHONY : resp_tests.cpp.s
+
 store_tests.o: store_tests.cpp.o
 .PHONY : store_tests.o
 
@@ -173,7 +211,11 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... test"
+	@echo "... resp_tests"
 	@echo "... store_tests"
+	@echo "... resp_tests.o"
+	@echo "... resp_tests.i"
+	@echo "... resp_tests.s"
 	@echo "... store_tests.o"
 	@echo "... store_tests.i"
 	@echo "... store_tests.s"

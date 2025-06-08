@@ -69,7 +69,9 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
+  "CMakeFiles/resp.dir/DependInfo.cmake"
   "CMakeFiles/redis-server.dir/DependInfo.cmake"
   "CMakeFiles/store.dir/DependInfo.cmake"
   "tests/CMakeFiles/store_tests.dir/DependInfo.cmake"
+  "tests/CMakeFiles/resp_tests.dir/DependInfo.cmake"
   )
