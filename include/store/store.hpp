@@ -31,10 +31,15 @@ class Store {
 
         template<typename Rep, typename Period>
         bool expire(const std::string& key, std::chrono::duration<Rep, Period> ttl) {
-            return expire_at(key, get_time_() + ttl);
+            std::lock_guard<std::recursive_mutex> lock(mutex);
+            if (store.find(key) == store.end()) {
+                return false;
+            }
+            store[key].expiry = get_time_() + ttl;
+            return true;
         }
 
-        bool expire_at(const std::string& key, TimePoint expiry);
+        
 
         std::optional<std::chrono::seconds> getTTL(const std::string& key);
 

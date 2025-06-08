@@ -58,15 +58,6 @@ namespace store {
         return result;
     }
 
-    bool Store::expire_at(const std::string& key, TimePoint expiry) {
-        std::lock_guard<std::recursive_mutex> lock(mutex);
-        if (store.find(key) == store.end()) {
-            return false;
-        }
-        store[key].expiry = expiry;
-        return true;
-    }
-
     std::optional<std::chrono::seconds> Store::getTTL(const std::string& key) {
         std::lock_guard<std::recursive_mutex> lock(mutex);
         if (store.find(key) == store.end()) {

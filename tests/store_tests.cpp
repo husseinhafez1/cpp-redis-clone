@@ -108,7 +108,7 @@ TEST_F(StoreTests, UpdateExpired) {
     std::cout << "Running UpdateExpired test" << std::endl;
     EXPECT_TRUE(store.add("key1", "value1"));
 
-    EXPECT_TRUE(store.expire_at("key1", current_time));
+    EXPECT_TRUE(store.expire("key1", std::chrono::milliseconds(0)));
 
     advance_time(std::chrono::milliseconds(10));
 
@@ -121,7 +121,7 @@ TEST_F(StoreTests, GetAllWithExpired) {
     EXPECT_TRUE(store.add("key1", "value1"));
     EXPECT_TRUE(store.add("key2", "value2"));
 
-    EXPECT_TRUE(store.expire_at("key1", current_time));
+    EXPECT_TRUE(store.expire("key1", std::chrono::milliseconds(0)));
 
     advance_time(std::chrono::milliseconds(10));
 
