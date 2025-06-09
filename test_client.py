@@ -27,12 +27,19 @@ def test_commands():
     print("\nTesting GET after PERSIST...")
     send_resp_command(get_cmd)
     
+    print("\nTesting METRICS before DEL...")
+    metrics_cmd = b'*1\r\n$7\r\nMETRICS\r\n'
+    send_resp_command(metrics_cmd)
+    
     print("\nTesting DEL command...")
     del_cmd = b'*2\r\n$3\r\nDEL\r\n$3\r\nkey\r\n'
     send_resp_command(del_cmd)
     
     print("\nTesting GET after DEL...")
     send_resp_command(get_cmd)
+
+    print("\nTesting METRICS after DEL...")
+    send_resp_command(metrics_cmd)
 
 if __name__ == "__main__":
     test_commands() 

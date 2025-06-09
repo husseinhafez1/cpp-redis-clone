@@ -235,6 +235,9 @@ cpp-redis-clone_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 cpp-redis-clone_SOURCE_DIR:STATIC=/mnt/c/Users/Legon/Desktop/cpp-redis-clone
 
+//Dependencies for the target
+store_LIB_DEPENDS:STATIC=general;metrics;
+
 
 ########################
 # INTERNAL cache entries

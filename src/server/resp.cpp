@@ -13,8 +13,6 @@ namespace resp {
 
     std::optional<Value> Parser::parse(const std::string& input, size_t& pos) {
         if (pos >= input.size()) return std::nullopt;
-        
-        // Add a maximum parse depth to prevent stack overflow
         static const size_t MAX_PARSE_DEPTH = 100;
         static thread_local size_t parse_depth = 0;
         

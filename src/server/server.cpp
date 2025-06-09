@@ -1,5 +1,6 @@
 #include "server/server.hpp"
 #include "server/aof_manager.hpp"
+#include "server/metrics.hpp"
 #include <iostream>
 
 namespace server {
@@ -28,17 +29,22 @@ Server::~Server() {
 void Server::start() {
     if (running_) return;
     running_ = true;
+    std::cout << "Starting AOF replay..." << std::endl;
     aof_manager_.replay(
         [this](const std::string& key, const std::string& value) {
+            std::cout << "Replaying SET command for key='" << key << "', value='" << value << "'" << std::endl;
             store_.add(key, value);
         },
         [this](const std::string& key) {
+            std::cout << "Replaying DEL command for key='" << key << "'" << std::endl;
             store_.remove(key);
         },
         [this](const std::string& key) {
+            std::cout << "Replaying PERSIST command for key='" << key << "'" << std::endl;
             store_.persist(key);
         }
     );
+    std::cout << "AOF replay completed" << std::endl;
     store_.startCleanupThread(std::chrono::seconds(60));
     std::cout << "Server starting on " << host_ << ":" << port_ << std::endl;
     accept_connections();
@@ -64,6 +70,7 @@ void Server::accept_connections() {
     acceptor_.async_accept(
         [this](const boost::system::error_code& error, boost::asio::ip::tcp::socket socket) {
             if (!error) {
+                Metrics::getInstance().incrementConnections();
                 threads_.emplace_back(
                     [this, socket = std::move(socket)]() mutable {
                         handle_client(std::move(socket));
@@ -89,14 +96,17 @@ void Server::handle_client(boost::asio::ip::tcp::socket&& socket) {
             if (error) {
                 if (error == boost::asio::error::eof) {
                     std::cout << "Client disconnected normally" << std::endl;
+                    Metrics::getInstance().decrementConnections();
                 } else {
                     std::cerr << "Error reading from socket: " << error.message() << std::endl;
+                    Metrics::getInstance().incrementAOFErrors();
                 }
                 break;
             }
             
             if (bytes_read == 0) {
                 std::cout << "No data received, client might have disconnected" << std::endl;
+                Metrics::getInstance().decrementConnections();
                 break;
             }
             
@@ -107,6 +117,7 @@ void Server::handle_client(boost::asio::ip::tcp::socket&& socket) {
             
             if (complete_message.size() > 1024 * 1024) {
                 std::cerr << "Message too large, disconnecting client" << std::endl;
+                Metrics::getInstance().decrementConnections();
                 break;
             }
             
@@ -127,6 +138,7 @@ void Server::handle_client(boost::asio::ip::tcp::socket&& socket) {
             boost::asio::write(socket, boost::asio::buffer(serialized), error);
             if (error) {
                 std::cerr << "Error writing response: " << error.message() << std::endl;
+                Metrics::getInstance().incrementAOFErrors();
                 break;
             }
             
@@ -134,6 +146,7 @@ void Server::handle_client(boost::asio::ip::tcp::socket&& socket) {
         }
     } catch (const std::exception& e) {
         std::cerr << "Error handling client: " << e.what() << std::endl;
+        Metrics::getInstance().incrementAOFErrors();
     }
     
     socket.close();
@@ -190,14 +203,35 @@ resp::Value Server::handleCommand(const resp::Value& command) {
                 }
                 
                 try {
-                    if (store_.add(key, value)) {
+                    std::cout << "\n=== Processing SET command ===" << std::endl;
+                    std::cout << "Key: '" << key << "'" << std::endl;
+                    std::cout << "Value: '" << value << "'" << std::endl;
+                    std::cout.flush();
+
+                    std::cout << "Calling store_.add..." << std::endl;
+                    std::cout.flush();
+                    bool add_result = store_.add(key, value);
+                    std::cout << "store_.add returned: " << (add_result ? "true" : "false") << std::endl;
+                    std::cout.flush();
+
+                    if (add_result) {
+                        std::cout << "Calling aof_manager_.logSet..." << std::endl;
+                        std::cout.flush();
                         aof_manager_.logSet(key, value);
+                        std::cout << "Calling Metrics::incrementCommand..." << std::endl;
+                        std::cout.flush();
+                        Metrics::getInstance().incrementCommand("SET");
+                        std::cout << "=== SET command completed successfully ===\n" << std::endl;
+                        std::cout.flush();
                         return resp::SimpleString{"OK"};
                     } else {
+                        std::cout << "=== SET command failed: key already exists ===\n" << std::endl;
+                        std::cout.flush();
                         return resp::Error{"ERR key already exists"};
                     }
                 } catch (const std::exception& e) {
                     std::cerr << "Error in SET command: " << e.what() << std::endl;
+                    std::cerr.flush();
                     return resp::Error{"ERR internal error"};
                 }
             }
@@ -219,6 +253,7 @@ resp::Value Server::handleCommand(const resp::Value& command) {
                 
                 auto value = store_.get(key);
                 if (value) {
+                    Metrics::getInstance().incrementCommand("GET");
                     return resp::BulkString{*value};
                 } else {
                     return resp::BulkString{std::nullopt};
@@ -253,6 +288,7 @@ resp::Value Server::handleCommand(const resp::Value& command) {
                         } catch (const std::exception& e) {
                             std::cerr << "Error logging DEL to AOF: " << e.what() << std::endl;
                         }
+                        Metrics::getInstance().incrementCommand("DEL");
                         return resp::Integer{1};
                     } else {
                         std::cout << "Failed to delete key" << std::endl;
@@ -292,6 +328,7 @@ resp::Value Server::handleCommand(const resp::Value& command) {
                         } catch (const std::exception& e) {
                             std::cerr << "Error logging PERSIST to AOF: " << e.what() << std::endl;
                         }
+                        Metrics::getInstance().incrementCommand("PERSIST");
                         return resp::Integer{1};
                     } else {
                         std::cout << "Failed to persist key" << std::endl;
@@ -299,6 +336,19 @@ resp::Value Server::handleCommand(const resp::Value& command) {
                     }
                 } catch (const std::exception& e) {
                     std::cerr << "Error in PERSIST command: " << e.what() << std::endl;
+                    return resp::Error{"ERR internal error"};
+                }
+            }
+            else if (cmd == "METRICS") {
+                if (array.size() != 1) {
+                    return resp::Error{"ERR wrong number of arguments for METRICS command"};
+                }
+                
+                try {
+                    std::string metrics = Metrics::getInstance().getPrometheusMetrics();
+                    return resp::BulkString{metrics};
+                } catch (const std::exception& e) {
+                    std::cerr << "Error getting metrics: " << e.what() << std::endl;
                     return resp::Error{"ERR internal error"};
                 }
             }

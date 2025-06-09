@@ -1,10 +1,5 @@
 [
 {
-  "directory": "/mnt/c/Users/Legon/Desktop/cpp-redis-clone/build",
-  "command": "/usr/bin/c++  -I/mnt/c/Users/Legon/Desktop/cpp-redis-clone/include -Wall -Wextra -Wpedantic -Werror -std=gnu++17 -o CMakeFiles/store.dir/src/store/store.cpp.o -c /mnt/c/Users/Legon/Desktop/cpp-redis-clone/src/store/store.cpp",
-  "file": "/mnt/c/Users/Legon/Desktop/cpp-redis-clone/src/store/store.cpp"
-},
-{
   "directory": "/mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/tests",
   "command": "/usr/bin/c++  -I/mnt/c/Users/Legon/Desktop/cpp-redis-clone/include -Wall -Wextra -Wpedantic -Werror -DGTEST_HAS_PTHREAD=1 -std=gnu++17 -o CMakeFiles/store_tests.dir/store_tests.cpp.o -c /mnt/c/Users/Legon/Desktop/cpp-redis-clone/tests/store_tests.cpp",
   "file": "/mnt/c/Users/Legon/Desktop/cpp-redis-clone/tests/store_tests.cpp"

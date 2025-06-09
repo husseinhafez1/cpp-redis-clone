@@ -93,6 +93,7 @@ store_tests_EXTERNAL_OBJECTS =
 tests/store_tests: tests/CMakeFiles/store_tests.dir/store_tests.cpp.o
 tests/store_tests: tests/CMakeFiles/store_tests.dir/build.make
 tests/store_tests: libstore.a
+tests/store_tests: libmetrics.a
 tests/store_tests: /usr/lib/x86_64-linux-gnu/libgtest_main.a
 tests/store_tests: /usr/lib/x86_64-linux-gnu/libgtest.a
 tests/store_tests: tests/CMakeFiles/store_tests.dir/link.txt

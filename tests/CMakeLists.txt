@@ -13,6 +13,7 @@ target_link_libraries(store_tests
     GTest::GTest
     GTest::Main
     store
+    metrics
 )
 
 target_link_libraries(resp_tests 
@@ -20,6 +21,7 @@ target_link_libraries(resp_tests
     GTest::GTest 
     GTest::Main
     resp
+    metrics
 )
 
 target_include_directories(resp_tests

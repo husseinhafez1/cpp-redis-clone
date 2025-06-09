@@ -140,17 +140,17 @@ resp/fast:
 .PHONY : resp/fast
 
 #=============================================================================
-# Target rules for targets named redis-server
+# Target rules for targets named metrics
 
 # Build rule for target.
-redis-server: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 redis-server
-.PHONY : redis-server
+metrics: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 metrics
+.PHONY : metrics
 
 # fast build rule for target.
-redis-server/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/build
-.PHONY : redis-server/fast
+metrics/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/metrics.dir/build.make CMakeFiles/metrics.dir/build
+.PHONY : metrics/fast
 
 #=============================================================================
 # Target rules for targets named store
@@ -164,6 +164,19 @@ store: cmake_check_build_system
 store/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/store.dir/build.make CMakeFiles/store.dir/build
 .PHONY : store/fast
+
+#=============================================================================
+# Target rules for targets named redis-server
+
+# Build rule for target.
+redis-server: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 redis-server
+.PHONY : redis-server
+
+# fast build rule for target.
+redis-server/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/build
+.PHONY : redis-server/fast
 
 #=============================================================================
 # Target rules for targets named store_tests
@@ -239,6 +252,30 @@ src/server/aof_manager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/src/server/aof_manager.cpp.s
 .PHONY : src/server/aof_manager.cpp.s
 
+src/server/metrics.o: src/server/metrics.cpp.o
+.PHONY : src/server/metrics.o
+
+# target to build an object file
+src/server/metrics.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/metrics.dir/build.make CMakeFiles/metrics.dir/src/server/metrics.cpp.o
+.PHONY : src/server/metrics.cpp.o
+
+src/server/metrics.i: src/server/metrics.cpp.i
+.PHONY : src/server/metrics.i
+
+# target to preprocess a source file
+src/server/metrics.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/metrics.dir/build.make CMakeFiles/metrics.dir/src/server/metrics.cpp.i
+.PHONY : src/server/metrics.cpp.i
+
+src/server/metrics.s: src/server/metrics.cpp.s
+.PHONY : src/server/metrics.s
+
+# target to generate assembly for a file
+src/server/metrics.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/metrics.dir/build.make CMakeFiles/metrics.dir/src/server/metrics.cpp.s
+.PHONY : src/server/metrics.cpp.s
+
 src/server/resp.o: src/server/resp.cpp.o
 .PHONY : src/server/resp.o
 
@@ -292,7 +329,6 @@ src/store/store.o: src/store/store.cpp.o
 
 # target to build an object file
 src/store/store.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/src/store/store.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/store.dir/build.make CMakeFiles/store.dir/src/store/store.cpp.o
 .PHONY : src/store/store.cpp.o
 
@@ -301,7 +337,6 @@ src/store/store.i: src/store/store.cpp.i
 
 # target to preprocess a source file
 src/store/store.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/src/store/store.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/store.dir/build.make CMakeFiles/store.dir/src/store/store.cpp.i
 .PHONY : src/store/store.cpp.i
 
@@ -310,7 +345,6 @@ src/store/store.s: src/store/store.cpp.s
 
 # target to generate assembly for a file
 src/store/store.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/src/store/store.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/store.dir/build.make CMakeFiles/store.dir/src/store/store.cpp.s
 .PHONY : src/store/store.cpp.s
 
@@ -323,6 +357,7 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... test"
+	@echo "... metrics"
 	@echo "... redis-server"
 	@echo "... resp"
 	@echo "... resp_tests"
@@ -334,6 +369,9 @@ help:
 	@echo "... src/server/aof_manager.o"
 	@echo "... src/server/aof_manager.i"
 	@echo "... src/server/aof_manager.s"
+	@echo "... src/server/metrics.o"
+	@echo "... src/server/metrics.i"
+	@echo "... src/server/metrics.s"
 	@echo "... src/server/resp.o"
 	@echo "... src/server/resp.i"
 	@echo "... src/server/resp.s"

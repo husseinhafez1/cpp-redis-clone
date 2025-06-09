@@ -64,8 +64,9 @@ CMAKE_BINARY_DIR = /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build
 
 # The main recursive "all" target.
 all: CMakeFiles/resp.dir/all
-all: CMakeFiles/redis-server.dir/all
+all: CMakeFiles/metrics.dir/all
 all: CMakeFiles/store.dir/all
+all: CMakeFiles/redis-server.dir/all
 all: tests/all
 .PHONY : all
 
@@ -75,8 +76,9 @@ preinstall: tests/preinstall
 
 # The main recursive "clean" target.
 clean: CMakeFiles/resp.dir/clean
-clean: CMakeFiles/redis-server.dir/clean
+clean: CMakeFiles/metrics.dir/clean
 clean: CMakeFiles/store.dir/clean
+clean: CMakeFiles/redis-server.dir/clean
 clean: tests/clean
 .PHONY : clean
 
@@ -104,7 +106,7 @@ tests/clean: tests/CMakeFiles/resp_tests.dir/clean
 CMakeFiles/resp.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/resp.dir/build.make CMakeFiles/resp.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/resp.dir/build.make CMakeFiles/resp.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles --progress-num=6,7 "Built target resp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles --progress-num=7,8 "Built target resp"
 .PHONY : CMakeFiles/resp.dir/all
 
 # Build rule for subdir invocation for target.
@@ -124,44 +126,44 @@ CMakeFiles/resp.dir/clean:
 .PHONY : CMakeFiles/resp.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/redis-server.dir
+# Target rules for target CMakeFiles/metrics.dir
 
 # All Build rule for target.
-CMakeFiles/redis-server.dir/all: CMakeFiles/resp.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles --progress-num=1,2,3,4,5 "Built target redis-server"
-.PHONY : CMakeFiles/redis-server.dir/all
+CMakeFiles/metrics.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/metrics.dir/build.make CMakeFiles/metrics.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/metrics.dir/build.make CMakeFiles/metrics.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles --progress-num=1,2 "Built target metrics"
+.PHONY : CMakeFiles/metrics.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/redis-server.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles 7
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/redis-server.dir/all
+CMakeFiles/metrics.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/metrics.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles 0
-.PHONY : CMakeFiles/redis-server.dir/rule
+.PHONY : CMakeFiles/metrics.dir/rule
 
 # Convenience name for target.
-redis-server: CMakeFiles/redis-server.dir/rule
-.PHONY : redis-server
+metrics: CMakeFiles/metrics.dir/rule
+.PHONY : metrics
 
 # clean rule for target.
-CMakeFiles/redis-server.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/clean
-.PHONY : CMakeFiles/redis-server.dir/clean
+CMakeFiles/metrics.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/metrics.dir/build.make CMakeFiles/metrics.dir/clean
+.PHONY : CMakeFiles/metrics.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/store.dir
 
 # All Build rule for target.
-CMakeFiles/store.dir/all:
+CMakeFiles/store.dir/all: CMakeFiles/metrics.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/store.dir/build.make CMakeFiles/store.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/store.dir/build.make CMakeFiles/store.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles --progress-num=10,11 "Built target store"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles --progress-num=11,12 "Built target store"
 .PHONY : CMakeFiles/store.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/store.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/store.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles 0
 .PHONY : CMakeFiles/store.dir/rule
@@ -176,18 +178,47 @@ CMakeFiles/store.dir/clean:
 .PHONY : CMakeFiles/store.dir/clean
 
 #=============================================================================
+# Target rules for target CMakeFiles/redis-server.dir
+
+# All Build rule for target.
+CMakeFiles/redis-server.dir/all: CMakeFiles/resp.dir/all
+CMakeFiles/redis-server.dir/all: CMakeFiles/metrics.dir/all
+CMakeFiles/redis-server.dir/all: CMakeFiles/store.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles --progress-num=3,4,5,6 "Built target redis-server"
+.PHONY : CMakeFiles/redis-server.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/redis-server.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles 10
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/redis-server.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles 0
+.PHONY : CMakeFiles/redis-server.dir/rule
+
+# Convenience name for target.
+redis-server: CMakeFiles/redis-server.dir/rule
+.PHONY : redis-server
+
+# clean rule for target.
+CMakeFiles/redis-server.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis-server.dir/build.make CMakeFiles/redis-server.dir/clean
+.PHONY : CMakeFiles/redis-server.dir/clean
+
+#=============================================================================
 # Target rules for target tests/CMakeFiles/store_tests.dir
 
 # All Build rule for target.
+tests/CMakeFiles/store_tests.dir/all: CMakeFiles/metrics.dir/all
 tests/CMakeFiles/store_tests.dir/all: CMakeFiles/store.dir/all
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/store_tests.dir/build.make tests/CMakeFiles/store_tests.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/store_tests.dir/build.make tests/CMakeFiles/store_tests.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles --progress-num=12,13 "Built target store_tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles --progress-num=13,14 "Built target store_tests"
 .PHONY : tests/CMakeFiles/store_tests.dir/all
 
 # Build rule for subdir invocation for target.
 tests/CMakeFiles/store_tests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles 6
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/store_tests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles 0
 .PHONY : tests/CMakeFiles/store_tests.dir/rule
@@ -206,14 +237,15 @@ tests/CMakeFiles/store_tests.dir/clean:
 
 # All Build rule for target.
 tests/CMakeFiles/resp_tests.dir/all: CMakeFiles/resp.dir/all
+tests/CMakeFiles/resp_tests.dir/all: CMakeFiles/metrics.dir/all
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/resp_tests.dir/build.make tests/CMakeFiles/resp_tests.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/resp_tests.dir/build.make tests/CMakeFiles/resp_tests.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles --progress-num=8,9 "Built target resp_tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles --progress-num=9,10 "Built target resp_tests"
 .PHONY : tests/CMakeFiles/resp_tests.dir/all
 
 # Build rule for subdir invocation for target.
 tests/CMakeFiles/resp_tests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles 6
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/resp_tests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles 0
 .PHONY : tests/CMakeFiles/resp_tests.dir/rule

@@ -1,5 +1,6 @@
 #include "server/aof_manager.hpp"
 #include "server/resp.hpp"
+#include "server/metrics.hpp"
 #include <iostream>
 
 namespace server {
@@ -41,6 +42,7 @@ namespace server {
                 return false;
             }
             
+            Metrics::getInstance().incrementAOFWrites();
             return true;
         } catch (const std::exception& e) {
             std::cerr << "Error in logSet: " << e.what() << std::endl;
@@ -71,6 +73,7 @@ namespace server {
                 return false;
             }
             
+            Metrics::getInstance().incrementAOFWrites();
             return true;
         } catch (const std::exception& e) {
             std::cerr << "Error in logDel: " << e.what() << std::endl;
@@ -101,6 +104,7 @@ namespace server {
                 return false;
             }
             
+            Metrics::getInstance().incrementAOFWrites();
             return true;
         } catch (const std::exception& e) {
             std::cerr << "Error in logPersist: " << e.what() << std::endl;
@@ -174,7 +178,7 @@ namespace server {
         if (!aof_file_.is_open()) {
             return false;
         }
-
+        
         aof_file_ << command;
         aof_file_.flush();
         return true;

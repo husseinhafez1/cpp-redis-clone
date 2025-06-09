@@ -1,6 +1,7 @@
 /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles/resp.dir
-/mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles/redis-server.dir
+/mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles/metrics.dir
 /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles/store.dir
+/mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles/redis-server.dir
 /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles/test.dir
 /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles/edit_cache.dir
 /mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles/rebuild_cache.dir

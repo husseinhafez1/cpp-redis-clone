@@ -8,12 +8,11 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/mnt/c/Users/Legon/Desktop/cpp-redis-clone/src/store/store.cpp" "CMakeFiles/store.dir/src/store/store.cpp.o" "gcc" "CMakeFiles/store.dir/src/store/store.cpp.o.d"
+  "/mnt/c/Users/Legon/Desktop/cpp-redis-clone/src/server/metrics.cpp" "CMakeFiles/metrics.dir/src/server/metrics.cpp.o" "gcc" "CMakeFiles/metrics.dir/src/server/metrics.cpp.o.d"
   )
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/mnt/c/Users/Legon/Desktop/cpp-redis-clone/build/CMakeFiles/metrics.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

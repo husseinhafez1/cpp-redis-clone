@@ -11,11 +11,6 @@ PERSIST
 $3
 key
 *2
-$7
-PERSIST
-$3
-key
-*2
 $3
 DEL
 $3

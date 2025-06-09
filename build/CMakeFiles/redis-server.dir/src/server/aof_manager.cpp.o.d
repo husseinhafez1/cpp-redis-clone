@@ -181,4 +181,8 @@ CMakeFiles/redis-server.dir/src/server/aof_manager.cpp.o: \
  /usr/include/c++/11/bits/stl_tempbuf.h \
  /usr/include/c++/11/bits/uniform_int_dist.h /usr/include/c++/11/optional \
  /mnt/c/Users/Legon/Desktop/cpp-redis-clone/include/server/resp.hpp \
- /usr/include/c++/11/variant /usr/include/c++/11/iostream
+ /usr/include/c++/11/variant \
+ /mnt/c/Users/Legon/Desktop/cpp-redis-clone/include/server/metrics.hpp \
+ /usr/include/c++/11/atomic /usr/include/c++/11/bits/atomic_base.h \
+ /usr/include/c++/11/bits/atomic_lockfree_defines.h \
+ /usr/include/c++/11/iostream

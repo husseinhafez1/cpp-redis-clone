@@ -22,6 +22,7 @@ class Store {
             : time_provider_(time_provider), running_(false) {}
         ~Store() = default;
 
+        size_t calculateMemoryUsage(const std::string& key, const std::string& value);
         bool add(const std::string& key, const std::string& value);
 
         bool remove(const std::string& key);

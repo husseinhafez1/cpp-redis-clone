@@ -93,6 +93,7 @@ resp_tests_EXTERNAL_OBJECTS =
 tests/resp_tests: tests/CMakeFiles/resp_tests.dir/resp_tests.cpp.o
 tests/resp_tests: tests/CMakeFiles/resp_tests.dir/build.make
 tests/resp_tests: libresp.a
+tests/resp_tests: libmetrics.a
 tests/resp_tests: /usr/lib/x86_64-linux-gnu/libgtest_main.a
 tests/resp_tests: /usr/lib/x86_64-linux-gnu/libgtest.a
 tests/resp_tests: tests/CMakeFiles/resp_tests.dir/link.txt

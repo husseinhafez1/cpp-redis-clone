@@ -5,8 +5,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/redis-server.dir/src/server/aof_manager.cpp.o.d"
   "CMakeFiles/redis-server.dir/src/server/server.cpp.o"
   "CMakeFiles/redis-server.dir/src/server/server.cpp.o.d"
-  "CMakeFiles/redis-server.dir/src/store/store.cpp.o"
-  "CMakeFiles/redis-server.dir/src/store/store.cpp.o.d"
   "redis-server"
   "redis-server.pdb"
 )
