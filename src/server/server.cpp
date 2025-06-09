@@ -83,8 +83,6 @@ void Server::handle_client(boost::asio::ip::tcp::socket&& socket) {
         while (running_) {
             boost::asio::streambuf buffer;
             boost::system::error_code error;
-            
-            // Set a timeout for read operations
             socket.set_option(boost::asio::ip::tcp::socket::linger(true, 0));
             
             size_t bytes_read = socket.read_some(boost::asio::buffer(buffer.prepare(1024)), error);
@@ -107,8 +105,7 @@ void Server::handle_client(boost::asio::ip::tcp::socket&& socket) {
             complete_message += chunk;
             buffer.consume(buffer.size());
             
-            // Add a maximum message size check
-            if (complete_message.size() > 1024 * 1024) { // 1MB limit
+            if (complete_message.size() > 1024 * 1024) {
                 std::cerr << "Message too large, disconnecting client" << std::endl;
                 break;
             }
@@ -139,11 +136,7 @@ void Server::handle_client(boost::asio::ip::tcp::socket&& socket) {
         std::cerr << "Error handling client: " << e.what() << std::endl;
     }
     
-    try {
-        socket.close();
-    } catch (...) {
-        // Ignore errors during socket closure
-    }
+    socket.close();
     
     std::cout << "Client disconnected" << std::endl;
 }
