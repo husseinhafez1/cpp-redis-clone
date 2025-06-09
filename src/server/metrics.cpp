@@ -13,6 +13,10 @@ void Metrics::incrementCommand(const std::string& command) {
         del_commands++;
     } else if (command == "PERSIST") {
         persist_commands++;
+    } else if (command == "EXPIRE") {
+        expire_commands++;
+    } else if (command == "TTL") {
+        ttl_commands++;
     }
 }
 
@@ -26,6 +30,10 @@ uint64_t Metrics::getCommandCount(const std::string& command) {
         return del_commands;
     } else if (command == "PERSIST") {
         return persist_commands;
+    } else if (command == "EXPIRE") {
+        return expire_commands;
+    } else if (command == "TTL") {
+        return ttl_commands;
     }
     return 0;
 }
@@ -111,7 +119,9 @@ std::string Metrics::getPrometheusMetrics() const {
     ss << "redis_commands_total{command=\"set\"} " << set_commands << "\n";
     ss << "redis_commands_total{command=\"get\"} " << get_commands << "\n";
     ss << "redis_commands_total{command=\"del\"} " << del_commands << "\n";
-    ss << "redis_commands_total{command=\"persist\"} " << persist_commands << "\n\n";
+    ss << "redis_commands_total{command=\"persist\"} " << persist_commands << "\n";
+    ss << "redis_commands_total{command=\"expire\"} " << expire_commands << "\n";
+    ss << "redis_commands_total{command=\"ttl\"} " << ttl_commands << "\n\n";
     
     ss << "# HELP redis_memory_bytes Total memory used in bytes\n";
     ss << "# TYPE redis_memory_bytes gauge\n";

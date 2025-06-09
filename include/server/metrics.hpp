@@ -33,12 +33,13 @@ private:
     std::atomic<uint64_t> get_commands{0};
     std::atomic<uint64_t> del_commands{0};
     std::atomic<uint64_t> persist_commands{0};
+    std::atomic<uint64_t> expire_commands{0};
+    std::atomic<uint64_t> ttl_commands{0};
     std::atomic<uint64_t> total_memory_bytes{0};
     std::atomic<uint64_t> active_connections{0};
     std::atomic<uint64_t> total_connections{0};
     std::atomic<uint64_t> aof_writes{0};
     std::atomic<uint64_t> aof_errors{0};
     mutable std::mutex mutex_;
-
 };
 }

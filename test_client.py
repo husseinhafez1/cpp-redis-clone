@@ -20,6 +20,14 @@ def test_commands():
     get_cmd = b'*2\r\n$3\r\nGET\r\n$3\r\nkey\r\n'
     send_resp_command(get_cmd)
     
+    print("\nTesting EXPIRE command...")
+    expire_cmd = b'*3\r\n$6\r\nEXPIRE\r\n$3\r\nkey\r\n$2\r\n10\r\n'
+    send_resp_command(expire_cmd)
+    
+    print("\nTesting TTL command...")
+    ttl_cmd = b'*2\r\n$3\r\nTTL\r\n$3\r\nkey\r\n'
+    send_resp_command(ttl_cmd)
+    
     print("\nTesting PERSIST command...")
     persist_cmd = b'*2\r\n$7\r\nPERSIST\r\n$3\r\nkey\r\n'
     send_resp_command(persist_cmd)

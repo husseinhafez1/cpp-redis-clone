@@ -339,6 +339,90 @@ resp::Value Server::handleCommand(const resp::Value& command) {
                     return resp::Error{"ERR internal error"};
                 }
             }
+            else if (cmd == "EXPIRE") {
+                if (array.size() != 3) {
+                    return resp::Error{"ERR wrong number of arguments for EXPIRE command"};
+                }
+                
+                std::string key;
+                if (array[1].holds_alternative<resp::BulkString>()) {
+                    const auto& bulk = array[1].get<resp::BulkString>();
+                    if (!bulk) {
+                        return resp::Error{"ERR invalid key"};
+                    }
+                    key = *bulk;
+                } else {
+                    return resp::Error{"ERR invalid key"};
+                }
+
+                int64_t seconds;
+                if (array[2].holds_alternative<resp::Integer>()) {
+                    seconds = array[2].get<resp::Integer>();
+                } else if (array[2].holds_alternative<resp::BulkString>()) {
+                    const auto& bulk = array[2].get<resp::BulkString>();
+                    if (!bulk) {
+                        return resp::Error{"ERR invalid seconds"};
+                    }
+                    try {
+                        seconds = std::stoll(*bulk);
+                    } catch (...) {
+                        return resp::Error{"ERR invalid seconds"};
+                    }
+                } else {
+                    return resp::Error{"ERR invalid seconds"};
+                }
+
+                if (seconds <= 0) {
+                    return resp::Error{"ERR invalid seconds"};
+                }
+                
+                try {
+                    std::cout << "Attempting to set expiry for key: " << key << " to " << seconds << " seconds" << std::endl;
+                    if (store_.setExpiry(key, std::chrono::seconds(seconds))) {
+                        std::cout << "Successfully set expiry" << std::endl;
+                        Metrics::getInstance().incrementCommand("EXPIRE");
+                        return resp::Integer{1};
+                    } else {
+                        std::cout << "Failed to set expiry" << std::endl;
+                        return resp::Integer{0};
+                    }
+                } catch (const std::exception& e) {
+                    std::cerr << "Error in EXPIRE command: " << e.what() << std::endl;
+                    return resp::Error{"ERR internal error"};
+                }
+            }
+            else if (cmd == "TTL") {
+                if (array.size() != 2) {
+                    return resp::Error{"ERR wrong number of arguments for TTL command"};
+                }
+                
+                std::string key;
+                if (array[1].holds_alternative<resp::BulkString>()) {
+                    const auto& bulk = array[1].get<resp::BulkString>();
+                    if (!bulk) {
+                        return resp::Error{"ERR invalid key"};
+                    }
+                    key = *bulk;
+                } else {
+                    return resp::Error{"ERR invalid key"};
+                }
+                
+                try {
+                    std::cout << "Getting TTL for key: " << key << std::endl;
+                    auto ttl = store_.getTTL(key);
+                    if (ttl) {
+                        std::cout << "TTL: " << ttl->count() << " seconds" << std::endl;
+                        Metrics::getInstance().incrementCommand("TTL");
+                        return resp::Integer{static_cast<int64_t>(ttl->count())};
+                    } else {
+                        std::cout << "No TTL set for key" << std::endl;
+                        return resp::Integer{-1};
+                    }
+                } catch (const std::exception& e) {
+                    std::cerr << "Error in TTL command: " << e.what() << std::endl;
+                    return resp::Error{"ERR internal error"};
+                }
+            }
             else if (cmd == "METRICS") {
                 if (array.size() != 1) {
                     return resp::Error{"ERR wrong number of arguments for METRICS command"};
