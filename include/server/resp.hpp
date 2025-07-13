@@ -2,6 +2,7 @@
 #include <vector>
 #include <variant>
 #include <optional>
+#include <cstdint>
 
 namespace server {
 namespace resp {
@@ -20,7 +21,7 @@ struct Error {
     size_t size() const { return value.size(); }
 };
 
-using Integer = int64_t;
+using Integer = std::int64_t;
 using BulkString = std::optional<std::string>;
 
 class Value;
