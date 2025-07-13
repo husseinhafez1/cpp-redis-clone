@@ -45,13 +45,13 @@ cd build
 make
 
 # Run
-./cpp-redis-clone
+./redis-server
 
 # Test
 python3 test_client.py
 
 # Run Unit Tests
-./tests/redis_tests
+./tests/resp_tests
 ```
 
 ## Testing
